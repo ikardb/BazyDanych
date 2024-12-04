@@ -44,3 +44,21 @@ func (h *UserHandler) GetUsers(context *fiber.Ctx) error {
 	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "users loaded successfully", "data": users})
 	return nil
 }
+
+func (h *UserHandler) GetUserById(context *fiber.Ctx) error {
+	user := &models.Users{}
+	id := context.Params("id")
+
+	if id == "" {
+		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "ID cannot be empty"})
+		return nil
+	}
+
+	err := h.DB.Where("id_uzytkownika = ?", id).First(user).Error
+	if err != nil {
+		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "User not found"})
+		return err
+	}
+	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "User ID fetched successfully", "data": user})
+	return nil
+}

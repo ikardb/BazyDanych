@@ -86,7 +86,7 @@ CREATE TABLE "zamowienie" (
 	"id_sklepu" SMALLINT NOT NULL,
 	"id_uzytkownika" SMALLINT,
 	"data_zamowienia" DATE NOT NULL,
-	"kosztZamowienia" MONEY NOT NULL,
+	"koszt_zamowienia" MONEY NOT NULL,
 	PRIMARY KEY("id_zamowienia")
 );
 
