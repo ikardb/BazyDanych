@@ -1,0 +1,14 @@
+# Domyślnie Git traktuje pliki tekstowe z końcami linii LF
+* text=auto
+
+# Wymuszenie LF dla specyficznych plików
+*.sh text eol=lf
+*.go text eol=lf
+*.mod text eol=lf
+*.sum text eol=lf
+
+# Pliki binarne - brak konwersji końców linii
+*.jpg -text
+*.png -text
+*.exe -text
+*.dll -text
