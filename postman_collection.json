@@ -1,0 +1,519 @@
+{
+	"info": {
+		"_postman_id": "3d4fb380-1f6f-408d-86a8-0f82f83dd42e",
+		"name": "ProjektBd",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "40154615"
+	},
+	"item": [
+		{
+			"name": "uztkownicy",
+			"item": [
+				{
+					"name": "createUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"imie\":\"2346\",\r\n    \"nazwisko\":\"23421242\",\r\n    \"administrator\": true,\r\n    \"login\":\"macmac\",\r\n    \"haslo\":\"123jd\",\r\n    \"id_sklepu\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/createUser"
+					},
+					"response": []
+				},
+				{
+					"name": "getUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/users"
+					},
+					"response": []
+				},
+				{
+					"name": "getUserById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/getUserById/3"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "sklep",
+			"item": [
+				{
+					"name": "createShop",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nazwa_sklepu\":\"sklep labachuj\",\r\n    \"ulica\":\"i made that bitch famous\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/createShop"
+					},
+					"response": []
+				},
+				{
+					"name": "getShops",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/shops"
+					},
+					"response": []
+				},
+				{
+					"name": "getShopById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/getShopById/3"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "zamowienie",
+			"item": [
+				{
+					"name": "createOrder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_sklepu\": 1,\r\n    \"id_uzytkownika\": 6,\r\n    \"koszt_zamowienia\": 6969.23\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/createOrder"
+					},
+					"response": []
+				},
+				{
+					"name": "getOrders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/orders"
+					},
+					"response": []
+				},
+				{
+					"name": "getOrderById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/getOrderById/3"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "pozycja_zamowienia",
+			"item": [
+				{
+					"name": "createOrderPosition",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_zamowienia\": 2,\r\n    \"id_pozycji_jadlospisu\": 2,\r\n    \"ilosc_produktu\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/createOrderPosition"
+					},
+					"response": []
+				},
+				{
+					"name": "getOrderPositions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/orderPositions"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "kuchnia",
+			"item": [
+				{
+					"name": "createKitchen",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ulica\": \"nyska\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/createKitchen"
+					},
+					"response": []
+				},
+				{
+					"name": "getKitchens",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/kitchens"
+					},
+					"response": []
+				},
+				{
+					"name": "getKitchenById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/getKitchenById/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "jadlospis",
+			"item": [
+				{
+					"name": "createDiningMenu",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_kuchni\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/createDiningMenu"
+					},
+					"response": []
+				},
+				{
+					"name": "getDiningMenus",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/diningMenus"
+					},
+					"response": []
+				},
+				{
+					"name": "getDiningMenuById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/getDiningMenuById/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "pozycja_jadlospisu",
+			"item": [
+				{
+					"name": "createDiningMenuPosition",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_jadlospisu\": 2,\r\n    \"id_produktu\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/createDiningMenuPosition"
+					},
+					"response": []
+				},
+				{
+					"name": "getDiningMenuPositions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/diningMenuPositions"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "produkt",
+			"item": [
+				{
+					"name": "createProduct",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nazwa\": \"surowka\",\r\n    \"cena\": 123.92\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/createProduct"
+					},
+					"response": []
+				},
+				{
+					"name": "getProducts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/products"
+					},
+					"response": []
+				},
+				{
+					"name": "getProductById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/getProductById/4"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "stan_magazynowy",
+			"item": [
+				{
+					"name": "createStockLevel",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_sklepu\": 2,\r\n    \"id_produktu\": 1,\r\n    \"ilosc\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/createStockLevel"
+					},
+					"response": []
+				},
+				{
+					"name": "getStockLevels",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/stockLevels"
+					},
+					"response": []
+				},
+				{
+					"name": "getStockLevelById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/getStockLevelById/2"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "sprzedaz",
+			"item": [
+				{
+					"name": "createSale",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_sklepu\": 3,\r\n    \"id_uzytkownika\": 2,\r\n    \"kwota_transakcji\": 1269.69\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/createSale"
+					},
+					"response": []
+				},
+				{
+					"name": "getSales",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/sales"
+					},
+					"response": []
+				},
+				{
+					"name": "getSaleById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/getSaleById/2"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "pozycja_sprzedazy",
+			"item": [
+				{
+					"name": "createSalePosition",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_sprzedazy\": 1,\r\n    \"id_produktu\": 5,\r\n    \"ilosc\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/createSalePosition"
+					},
+					"response": []
+				},
+				{
+					"name": "getSalePositions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/salePositions"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "firma_zewnetrzna",
+			"item": [
+				{
+					"name": "createThirdPartyCompany",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nazwa\": \"smaczki kaczki\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/createThirdPartyCompany"
+					},
+					"response": []
+				},
+				{
+					"name": "getThirdPartyCompanies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/thirdPartyCompanies"
+					},
+					"response": []
+				},
+				{
+					"name": "getThirdPartyCompanyById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/getThirdPartyCompanyById/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "oferta_firmy_zewnetrznej",
+			"item": [
+				{
+					"name": "createThirdPartyCompanyPosition",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_firmy\": 2,\r\n    \"id_produktu\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/createThirdPartyCompanyPosition"
+					},
+					"response": []
+				},
+				{
+					"name": "getThirdPartyCompanyPositions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/thirdPartyCompanyPositions"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

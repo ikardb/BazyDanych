@@ -12,5 +12,10 @@ func MigrateAll(db *gorm.DB) error {
 		&DiningMenuPositions{},
 		&Products{},
 		&OrderPositions{},
+		&StockLevels{},
+		&Sales{},
+		&SalePositions{},
+		&ThirdPartyCompanies{},
+		&ThirdPartyCompanyPositions{},
 	)
 }
