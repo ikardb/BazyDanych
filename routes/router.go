@@ -10,4 +10,8 @@ func SetupRoutes(app *fiber.App, db *gorm.DB) {
 	ShopRoutes(app, db)
 	OrderRoutes(app, db)
 	KitchenRoutes(app, db)
+	DiningMenuRoutes(app, db)
+	DiningMenuPositionRoutes(app, db)
+	ProductRoutes(app, db)
+	OrderPositionRoutes(app, db)
 }

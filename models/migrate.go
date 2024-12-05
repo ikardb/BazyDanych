@@ -7,5 +7,10 @@ func MigrateAll(db *gorm.DB) error {
 		&Users{},
 		&Shops{},
 		&Orders{},
+		&Kitchens{},
+		&DiningMenus{},
+		&DiningMenuPositions{},
+		&Products{},
+		&OrderPositions{},
 	)
 }

@@ -7,7 +7,7 @@ type Users struct {
 	Administrator  bool    `json:"administrator"`
 	Login          string  `json:"login"`
 	Haslo          string  `json:"haslo"`
-	Id_sklepu      uint    `json:"id_sklepu"`
+	Id_sklepu      int16   `json:"id_sklepu"`
 }
 
 func (Users) TableName() string {
