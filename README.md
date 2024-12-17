@@ -36,14 +36,14 @@ Args:	imie,
 		haslo,
 		id_sklepu
 
-# Transaction process
+#### Transaction process
 
-	## Creation
-		1. Creates a user with given args	
-	
-	## Authentication
-		1. Checks if there is a user in the database with given credentials
-		2. If yes: go ahead. If not: ask again (stop for 5 mins after 5 attempts - imo ok)
+###### Creation
+	1. Creates a user with given args	
+
+###### Authentication
+	1. Checks if there is a user in the database with given credentials
+	2. If yes: go ahead. If not: ask again (stop for 5 mins after 5 attempts - imo ok)
 
 </details>
 
@@ -51,7 +51,7 @@ Args:	imie,
 	<summary>Order</summary>
 
 
-# Transaction process
+#### Transaction process
 
 
 1. Order creation
@@ -60,7 +60,7 @@ Args:	imie,
 
 
 LATER irl:
-	__CONFIRMATION THE ORDER AT ARRIVAL__
+__CONFIRMATION THE ORDER AT ARRIVAL__
 
 
 </details>
@@ -68,7 +68,7 @@ LATER irl:
 <details>
 	<summary>Dining menu</summary>
 
-# Transaction process
+#### Transaction process
 
 1. Dining menu creation
 2. Create and add *dining menu* positions (from the products table)
@@ -78,7 +78,7 @@ LATER irl:
 <details>
 	<summary>Sale</summary>
 
-# Transaction process
+#### Transaction process
 
 1. Sale creation
 2. Create and add *sale positions* (from the products table)
@@ -93,7 +93,7 @@ Args:	id_sklepu
 		id_produktu
 		ilosc
 
-# Transaction process
+#### Transaction process
 
 1. Stock level check creation
 
@@ -107,7 +107,7 @@ Possible improvements: adding a date field to a table as a primary key
 <details>
 	<summary>Revenue from a timestep</summary>
 
-# Transaction process
+#### Transaction process
 
 1. Track every sale within the given timestep (default can be month idk)
 2. If not asked for a specific store, sum up the sale worth
