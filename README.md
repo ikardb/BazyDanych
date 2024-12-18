@@ -115,3 +115,23 @@ Possible improvements: adding a date field to a table as a primary key
 4. Sum them up
 
 </details>
+
+<details>
+	<summary>Third-party company</summary>
+
+#### Transaction process
+
+1. Create a company
+2. Add an offer
+
+</details>
+
+<details>
+	<summary>Third-party company offer position</summary>
+
+#### Transaction process
+
+1. Create products that a company has to offer
+2. Create the offer
+
+</details>
