@@ -83,6 +83,7 @@ CREATE TABLE "zamowienie" (
 	"id_uzytkownika" SMALLINT,
 	"data_zamowienia" DATE NOT NULL,
 	"koszt_zamowienia" MONEY NOT NULL,
+	"wczytane_do_stanu" BOOLEAN,
 	PRIMARY KEY("id_zamowienia")
 );
 

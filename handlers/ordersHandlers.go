@@ -16,6 +16,8 @@ type OrderHandler struct {
 func (h *OrderHandler) CreateOrder(context *fiber.Ctx) error {
 	order := models.Orders{}
 	order.Data_zamowienia = time.Now()
+	order.Koszt_zamowienia = 0
+	order.Wczytane_do_stanu = false
 
 	err := context.BodyParser(&order)
 
@@ -62,5 +64,105 @@ func (h *OrderHandler) GetOrderById(context *fiber.Ctx) error {
 		return err
 	}
 	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "order ID fetched successfully", "data": order})
+	return nil
+}
+
+func (h *OrderHandler) GetOrderPositions(context *fiber.Ctx) error {
+	id := context.Params("id")
+
+	if id == "" {
+		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "ID cannot be empty"})
+		return nil
+	}
+
+	orderPositions := []models.OrderPositions{}
+	query := `
+		SELECT *
+		FROM pozycja_zamowienia p
+		JOIN zamowienie z ON z.id_zamowienia = p.id_zamowienia
+		WHERE z.id_zamowienia = ?
+	`
+
+	err := h.DB.Raw(query, id).Scan(&orderPositions).Error
+	if err != nil {
+		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "order positions not found"})
+		return err
+	}
+	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "order positions fetched successfully", "data": orderPositions})
+	return nil
+}
+
+func (h *OrderHandler) MigrateToStock(context *fiber.Ctx) error {
+	id := context.Params("id")
+	if id == "" {
+		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "Order ID is required"})
+		return nil
+	}
+
+	order := models.Orders{}
+	err := h.DB.Where("id_zamowienia = ?", id).First(&order).Error
+	if err != nil {
+		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "Order not found"})
+	}
+
+	if order.Wczytane_do_stanu {
+		context.Status(http.StatusConflict).JSON(&fiber.Map{"message": "Order has already been migrated to stock"})
+		return nil
+	}
+
+	orderPositions := []models.OrderPositions{}
+
+	err = h.DB.Where("id_zamowienia = ?", id).Find(&orderPositions).Error
+	if err != nil || len(orderPositions) == 0 {
+		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "Order positions not found"})
+		return err
+	}
+
+	for _, orderPosition := range orderPositions {
+		diningMenuPosition := models.DiningMenuPositions{}
+		err = h.DB.Where("id_pozycji_jadlospisu = ?", orderPosition.Id_pozycji_jadlospisu).First(&diningMenuPosition).Error
+		if err != nil {
+			continue
+		}
+
+		product := models.Products{}
+		err = h.DB.Where("id_produktu = ?", diningMenuPosition.Id_produktu).First(&product).Error
+		if err != nil {
+			continue
+		}
+
+		stockLevel := models.StockLevels{}
+		err = h.DB.Where("id_sklepu = ? AND id_produktu = ?", order.Id_sklepu, product.Id_produktu).First(&stockLevel).Error
+
+		if err != nil {
+			newStockLevel := models.StockLevels{
+				Id_sklepu:   order.Id_sklepu,
+				Id_produktu: product.Id_produktu,
+				Ilosc:       orderPosition.Ilosc_produktu,
+			}
+			err = h.DB.Create(&newStockLevel).Error
+
+			if err != nil {
+				context.Status(http.StatusInternalServerError).JSON(&fiber.Map{"message": "Failed to create stock level"})
+				return err
+			}
+		} else {
+			stockLevel.Ilosc += orderPosition.Ilosc_produktu
+			err = h.DB.Save(&stockLevel).Error
+
+			if err != nil {
+				context.Status(http.StatusInternalServerError).JSON(&fiber.Map{"message": "Failed to update stock level"})
+				return err
+			}
+		}
+	}
+
+	err = h.DB.Model(&order).Update("Wczytane_do_stanu", true).Error
+	if err != nil {
+		context.Status(http.StatusInternalServerError).JSON(&fiber.Map{"message": "Failed to update order flag"})
+		return nil
+	}
+
+	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "Products migrated to stock levels successfully"})
 	return nil
 }

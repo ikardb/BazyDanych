@@ -14,6 +14,8 @@ type OrderPositionHandler struct {
 
 func (h *OrderPositionHandler) CreateOrderPosition(context *fiber.Ctx) error {
 	orderPosition := models.OrderPositions{}
+	product := models.Products{}
+	diningMenuPosition := models.DiningMenuPositions{}
 
 	err := context.BodyParser(&orderPosition)
 
@@ -22,10 +24,38 @@ func (h *OrderPositionHandler) CreateOrderPosition(context *fiber.Ctx) error {
 		return err
 	}
 
+	err = h.DB.Where("id_pozycji_jadlospisu = ?", orderPosition.Id_pozycji_jadlospisu).First(&diningMenuPosition).Error
+	if err != nil {
+		return context.Status(http.StatusNotFound).JSON(&fiber.Map{
+			"message": "Menu item not found",
+		})
+	}
+
+	err = h.DB.Where("id_produktu = ?", diningMenuPosition.Id_produktu).First(&product).Error
+	if err != nil {
+		return context.Status(http.StatusNotFound).JSON(&fiber.Map{
+			"message": "Menu item not found",
+		})
+	}
+
+	positionCost := float64(product.Cena) * float64(orderPosition.Ilosc_produktu)
+
 	err = h.DB.Create(&orderPosition).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "could not create order position"})
 		return err
+	}
+
+	updateQuery := `
+        UPDATE zamowienie
+        SET koszt_zamowienia = koszt_zamowienia + ?
+        WHERE id_zamowienia = ?
+    `
+	err = h.DB.Exec(updateQuery, positionCost, orderPosition.Id_zamowienia).Error
+	if err != nil {
+		return context.Status(http.StatusInternalServerError).JSON(&fiber.Map{
+			"message": "Failed to update order cost",
+		})
 	}
 
 	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "order position has been added"})
