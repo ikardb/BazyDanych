@@ -62,3 +62,28 @@ func (h *ThirdPartyCompanyHandler) GetThirdPartyCompanyById(context *fiber.Ctx) 
 	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "third party company ID fetched successfully", "data": thirdPartyCompany})
 	return nil
 }
+
+func (h *ThirdPartyCompanyHandler) GetThirdPartyCompanyOfferPositionsById(context *fiber.Ctx) error {
+	id := context.Params("id")
+
+	if id == "" {
+		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "ID cannot be empty"})
+		return nil
+	}
+
+	thirdPartyCompanyPositions := []models.ThirdPartyCompanyPositions{}
+	query := `
+		SELECT *
+		FROM oferta_firmy_zewnetrznej p
+		JOIN firma_zewnetrzna z ON z.id_firmy = p.id_firmy
+		WHERE z.id_firmy = ?
+		`
+	err := h.DB.Raw(query, id).Scan(&thirdPartyCompanyPositions).Error
+
+	if err != nil {
+		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "third party company offer positions not found"})
+		return err
+	}
+	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "third party offer positions fetched successfully", "data": thirdPartyCompanyPositions})
+	return nil
+}

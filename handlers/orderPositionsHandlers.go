@@ -50,7 +50,7 @@ func (h *OrderPositionHandler) CreateOrderPosition(context *fiber.Ctx) error {
         UPDATE zamowienie
         SET koszt_zamowienia = koszt_zamowienia + ?
         WHERE id_zamowienia = ?
-    `
+	`
 	err = h.DB.Exec(updateQuery, positionCost, orderPosition.Id_zamowienia).Error
 	if err != nil {
 		return context.Status(http.StatusInternalServerError).JSON(&fiber.Map{

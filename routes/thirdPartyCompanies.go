@@ -12,4 +12,5 @@ func ThirdPartyCompanyRoutes(app *fiber.App, db *gorm.DB) {
 	api.Post("/createThirdPartyCompany", h.CreateThirdPartyCompany)
 	api.Get("/thirdPartyCompanies", h.GetThirdPartyCompanies)
 	api.Get("/getThirdPartyCompanyById/:id", h.GetThirdPartyCompanyById)
+	api.Get("/getThirdPartyCompanyOfferPositionsById/:id", h.GetThirdPartyCompanyOfferPositionsById)
 }
