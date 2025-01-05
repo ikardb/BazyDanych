@@ -12,4 +12,5 @@ func UserRoutes(app *fiber.App, db *gorm.DB) {
 	api.Post("/createUser", h.CreateUser)
 	api.Get("/users", h.GetUsers)
 	api.Get("/getUserById/:id", h.GetUserById)
+	api.Post("/login", h.UserLogin)
 }
