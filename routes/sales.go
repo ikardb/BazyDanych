@@ -12,4 +12,5 @@ func SaleRoutes(app *fiber.App, db *gorm.DB) {
 	api.Post("/createSale", h.CreateSale)
 	api.Get("/sales", h.GetSales)
 	api.Get("/getSaleById/:id", h.GetSaleById)
+	api.Post("/sumSalesFromGivenTime", h.SumSalesFromGivenTime)
 }

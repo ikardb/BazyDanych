@@ -13,6 +13,13 @@ type SaleHandler struct {
 	DB *gorm.DB
 }
 
+type SumSalesRequest struct {
+	TimeStart time.Time `json:"od_kiedy"`
+	TimeEnd   time.Time `json:"do_kiedy"`
+	Store     int16     `json:"id_sklepu"`
+	User      int16     `json:"id_uzytkownika"`
+}
+
 func (h *SaleHandler) CreateSale(context *fiber.Ctx) error {
 	sale := models.Sales{}
 	sale.Data_sprzedazy = time.Now()
@@ -62,5 +69,44 @@ func (h *SaleHandler) GetSaleById(context *fiber.Ctx) error {
 		return err
 	}
 	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "sale ID fetched successfully", "data": sale})
+	return nil
+}
+
+func (h *SaleHandler) SumSalesFromGivenTimeStoreUser(context *fiber.Ctx) error {
+	sumSalesRequest := SumSalesRequest{}
+	err := context.BodyParser(&sumSalesRequest)
+
+	if err != nil {
+		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "Couldn't parse the given sumSalesRequest"})
+		return err
+	}
+
+	// NIE dziala musi byc raczej ustawione we frontendzie
+	// zeby domyslna wartosc sprawdzala do teraz
+	if sumSalesRequest.TimeEnd.IsZero() {
+		sumSalesRequest.TimeEnd = time.Now()
+	}
+
+	// if the sumSalesRequest is starting after it ends - error
+	if sumSalesRequest.TimeStart.Before(sumSalesRequest.TimeEnd) {
+		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "The given time window is wrong"})
+		return nil
+	}
+
+	sales := &[]models.Sales{}
+
+	// mialo byc sprawdzenie ktory uzytkownik i w zaleznosci od tego pobrac wlasciwe sprzedaze
+	if sumSalesRequest.User == n {
+
+	}
+
+	err = h.DB.Where("data_sprzedazy BETWEEN ? AND ?", sumSalesRequest.TimeStart, sumSalesRequest.TimeEnd).Find(sales).Error
+
+	if err != nil {
+		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "not found any sales in a given sumSalesRequest"})
+		return err
+	}
+
+	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "sales fetched successfully", "data": sales})
 	return nil
 }
