@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -16,8 +17,8 @@ type SaleHandler struct {
 type SumSalesRequest struct {
 	TimeStart time.Time `json:"od_kiedy"`
 	TimeEnd   time.Time `json:"do_kiedy"`
-	Store     int16     `json:"id_sklepu"`
-	User      int16     `json:"id_uzytkownika"`
+	StoreID   int16     `json:"id_sklepu"`
+	UserID    int16     `json:"id_uzytkownika"`
 }
 
 func (h *SaleHandler) CreateSale(context *fiber.Ctx) error {
@@ -73,6 +74,7 @@ func (h *SaleHandler) GetSaleById(context *fiber.Ctx) error {
 }
 
 func (h *SaleHandler) SumSalesFromGivenTimeStoreUser(context *fiber.Ctx) error {
+	// parametry beda mialy domyslne wartosci jesli sie parametry wyrzuci z jsona z requesta
 	sumSalesRequest := SumSalesRequest{}
 	err := context.BodyParser(&sumSalesRequest)
 
@@ -81,26 +83,40 @@ func (h *SaleHandler) SumSalesFromGivenTimeStoreUser(context *fiber.Ctx) error {
 		return err
 	}
 
-	// NIE dziala musi byc raczej ustawione we frontendzie
-	// zeby domyslna wartosc sprawdzala do teraz
+	// trzeba usunac przy wykonywaniu requesta zeby zadzialalo
+	// domyslnie sprawdza do chwili obecnej od poczatku miesiaca
 	if sumSalesRequest.TimeEnd.IsZero() {
 		sumSalesRequest.TimeEnd = time.Now()
 	}
+	if sumSalesRequest.TimeStart.IsZero() {
+		sumSalesRequest.TimeStart = time.Date(
+			sumSalesRequest.TimeEnd.Year(), sumSalesRequest.TimeEnd.Month(), 1, 0, 0, 0, 0, sumSalesRequest.TimeEnd.Location())
+	}
 
 	// if the sumSalesRequest is starting after it ends - error
-	if sumSalesRequest.TimeStart.Before(sumSalesRequest.TimeEnd) {
+	if sumSalesRequest.TimeStart.After(sumSalesRequest.TimeEnd) {
 		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "The given time window is wrong"})
 		return nil
 	}
 
 	sales := &[]models.Sales{}
 
-	// mialo byc sprawdzenie ktory uzytkownik i w zaleznosci od tego pobrac wlasciwe sprzedaze
-	if sumSalesRequest.User == n {
-
+	// inne query w zaleznosci od podanych przy requescie parametrow
+	// ID SKLEPU I UZYTKOWNIKA NIE MOGA BYC 0, JESLI MA SIE NA MYSLI KONKRETNY OBIEKT
+	if sumSalesRequest.UserID == 0 && sumSalesRequest.StoreID == 0 {
+		err = h.DB.Where("data_sprzedazy BETWEEN ? AND ?", sumSalesRequest.TimeStart, sumSalesRequest.TimeEnd).Find(sales).Error
 	}
 
-	err = h.DB.Where("data_sprzedazy BETWEEN ? AND ?", sumSalesRequest.TimeStart, sumSalesRequest.TimeEnd).Find(sales).Error
+	if sumSalesRequest.UserID != 0 && sumSalesRequest.StoreID == 0 {
+		err = h.DB.Where("data_sprzedazy BETWEEN ? AND ? AND id_uzytkownika = ?", sumSalesRequest.TimeStart, sumSalesRequest.TimeEnd, sumSalesRequest.UserID).Find(sales).Error
+	}
+
+	if sumSalesRequest.UserID == 0 && sumSalesRequest.StoreID != 0 {
+		err = h.DB.Where("data_sprzedazy BETWEEN ? AND ? AND id_sklepu = ?", sumSalesRequest.TimeStart, sumSalesRequest.TimeEnd, sumSalesRequest.StoreID).Find(sales).Error
+	}
+	if sumSalesRequest.UserID != 0 && sumSalesRequest.StoreID != 0 {
+		err = h.DB.Where("data_sprzedazy BETWEEN ? AND ? AND id_uzytkownika = ? AND id_sklepu = ?", sumSalesRequest.TimeStart, sumSalesRequest.TimeEnd, sumSalesRequest.UserID, sumSalesRequest.StoreID).Find(sales).Error
+	}
 
 	if err != nil {
 		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "not found any sales in a given sumSalesRequest"})
