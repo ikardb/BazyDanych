@@ -12,4 +12,5 @@ func StockLevelRoutes(app *fiber.App, db *gorm.DB) {
 	api.Post("/createStockLevel", h.CreateStockLevel)
 	api.Get("/stockLevels", h.GetStockLevels)
 	api.Get("/getStockLevelById/:id", h.GetStockLevelById)
+	api.Get("/getStockLevelByShopID/:id", h.GetStockLevelByShopId)
 }

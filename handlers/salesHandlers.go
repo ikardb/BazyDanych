@@ -78,6 +78,31 @@ func (h *SaleHandler) GetSaleById(context *fiber.Ctx) error {
 	return nil
 }
 
+func (h *SaleHandler) GetSalePositions(context *fiber.Ctx) error {
+	id := context.Params("id")
+
+	if id == "" {
+		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "ID cannot be empty"})
+		return nil
+	}
+
+	salePositions := []models.SalePositions{}
+	query := `
+		SELECT *
+		FROM pozycja_sprzedazy p
+		JOIN sprzedaz s ON s.id_sprzedazy = p.id_sprzedazy
+		WHERE s.id_sprzedazy = ?
+	`
+
+	err := h.DB.Raw(query, id).Scan(&salePositions).Error
+	if err != nil {
+		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "order positions not found"})
+		return err
+	}
+	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "order positions fetched successfully", "data": salePositions})
+	return nil
+}
+
 func (h *SaleHandler) SumSalesFromGivenTimeStoreUser(context *fiber.Ctx) error {
 	// parametry beda mialy domyslne wartosci jesli sie parametry wyrzuci z jsona z requesta
 	sumSalesRequest := SumSalesRequest{}
