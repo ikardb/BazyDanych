@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	"math"
 	"net/http"
 	"time"
 
@@ -19,6 +19,11 @@ type SumSalesRequest struct {
 	TimeEnd   time.Time `json:"do_kiedy"`
 	StoreID   int16     `json:"id_sklepu"`
 	UserID    int16     `json:"id_uzytkownika"`
+}
+
+func roundFloat(val float64, precision uint) float64 {
+	ratio := math.Pow(10, float64(precision))
+	return math.Round(val*ratio) / ratio
 }
 
 func (h *SaleHandler) CreateSale(context *fiber.Ctx) error {
@@ -83,6 +88,10 @@ func (h *SaleHandler) SumSalesFromGivenTimeStoreUser(context *fiber.Ctx) error {
 		return err
 	}
 
+	if sumSalesRequest.UserID < 0 || sumSalesRequest.StoreID < 0 {
+		return context.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "User ID and Store ID must be non-negative"})
+	}
+
 	// trzeba usunac przy wykonywaniu requesta zeby zadzialalo
 	// domyslnie sprawdza do chwili obecnej od poczatku miesiaca
 	if sumSalesRequest.TimeEnd.IsZero() {
@@ -99,30 +108,32 @@ func (h *SaleHandler) SumSalesFromGivenTimeStoreUser(context *fiber.Ctx) error {
 		return nil
 	}
 
-	sales := &[]models.Sales{}
+	sales := []models.Sales{}
 
+	query := h.DB.Model(&models.Sales{}).Where("data_sprzedazy BETWEEN ? AND ?", sumSalesRequest.TimeStart, sumSalesRequest.TimeEnd)
 	// inne query w zaleznosci od podanych przy requescie parametrow
 	// ID SKLEPU I UZYTKOWNIKA NIE MOGA BYC 0, JESLI MA SIE NA MYSLI KONKRETNY OBIEKT
-	if sumSalesRequest.UserID == 0 && sumSalesRequest.StoreID == 0 {
-		err = h.DB.Where("data_sprzedazy BETWEEN ? AND ?", sumSalesRequest.TimeStart, sumSalesRequest.TimeEnd).Find(sales).Error
+	if sumSalesRequest.UserID != 0 {
+		query = query.Where("id_uzytkownika = ?", sumSalesRequest.UserID)
 	}
 
-	if sumSalesRequest.UserID != 0 && sumSalesRequest.StoreID == 0 {
-		err = h.DB.Where("data_sprzedazy BETWEEN ? AND ? AND id_uzytkownika = ?", sumSalesRequest.TimeStart, sumSalesRequest.TimeEnd, sumSalesRequest.UserID).Find(sales).Error
+	if sumSalesRequest.StoreID != 0 {
+		query = query.Where("id_sklepu = ?", sumSalesRequest.StoreID)
 	}
 
-	if sumSalesRequest.UserID == 0 && sumSalesRequest.StoreID != 0 {
-		err = h.DB.Where("data_sprzedazy BETWEEN ? AND ? AND id_sklepu = ?", sumSalesRequest.TimeStart, sumSalesRequest.TimeEnd, sumSalesRequest.StoreID).Find(sales).Error
-	}
-	if sumSalesRequest.UserID != 0 && sumSalesRequest.StoreID != 0 {
-		err = h.DB.Where("data_sprzedazy BETWEEN ? AND ? AND id_uzytkownika = ? AND id_sklepu = ?", sumSalesRequest.TimeStart, sumSalesRequest.TimeEnd, sumSalesRequest.UserID, sumSalesRequest.StoreID).Find(sales).Error
-	}
+	err = query.Find(&sales).Error
 
 	if err != nil {
 		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "not found any sales in a given sumSalesRequest"})
 		return err
 	}
 
-	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "sales fetched successfully", "data": sales})
+	var salesSum float64
+	for _, sale := range sales {
+		salesSum += float64(sale.Kwota_transakcji)
+		salesSum = roundFloat(salesSum, 2)
+	}
+
+	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "sales fetched successfully", "utarg ze sprzedazy:": salesSum, "data": sales})
 	return nil
 }
