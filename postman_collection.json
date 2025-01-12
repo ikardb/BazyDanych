@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"imie\":\"2346\",\r\n    \"nazwisko\":\"23421242\",\r\n    \"administrator\": true,\r\n    \"login\":\"macmac\",\r\n    \"haslo\":\"123jd\",\r\n    \"id_sklepu\": 1\r\n}",
+							"raw": "{\r\n    \"imie\":\"marcin\",\r\n    \"nazwisko\":\"Kowalski\",\r\n    \"administrator\": false,\r\n    \"login\":\"macmac\",\r\n    \"haslo\":\"123jd\",\r\n    \"id_sklepu\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -69,7 +69,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nazwa_sklepu\":\"sklep labachuj\",\r\n    \"ulica\":\"i made that bitch famous\"\r\n}",
+							"raw": "{\r\n    \"nazwa_sklepu\":\"sklep jdjdjd\",\r\n    \"ulica\":\"kowal\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -110,7 +110,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_sklepu\": 1,\r\n    \"id_uzytkownika\": 6,\r\n    \"koszt_zamowienia\": 6969.23\r\n}",
+							"raw": "{\r\n    \"id_sklepu\": 3,\r\n    \"id_uzytkownika\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -135,7 +135,25 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8080/api/getOrderById/3"
+						"url": "http://localhost:8080/api/getOrderById/9"
+					},
+					"response": []
+				},
+				{
+					"name": "getOrderPositions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/getOrderPositions/7"
+					},
+					"response": []
+				},
+				{
+					"name": "migrateToStock",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:8080/api/migrateToStock/9"
 					},
 					"response": []
 				}
@@ -151,7 +169,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_zamowienia\": 2,\r\n    \"id_pozycji_jadlospisu\": 2,\r\n    \"ilosc_produktu\": 3\r\n}",
+							"raw": "{\r\n    \"id_zamowienia\": 9,\r\n    \"id_pozycji_jadlospisu\": 4,\r\n    \"ilosc_produktu\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -265,7 +283,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_jadlospisu\": 2,\r\n    \"id_produktu\": 3\r\n}",
+							"raw": "{\r\n    \"id_jadlospisu\": 3,\r\n    \"id_produktu\": 6\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -297,7 +315,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nazwa\": \"surowka\",\r\n    \"cena\": 123.92\r\n}",
+							"raw": "{\r\n    \"nazwa\": \"pizza\",\r\n    \"cena\": 69.99\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -366,6 +384,15 @@
 						"url": "http://localhost:8080/api/getStockLevelById/2"
 					},
 					"response": []
+				},
+				{
+					"name": "getStockLevelByShopID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/getStockLevelByShopID/3"
+					},
+					"response": []
 				}
 			]
 		},
@@ -379,7 +406,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_sklepu\": 3,\r\n    \"id_uzytkownika\": 2,\r\n    \"kwota_transakcji\": 1269.69\r\n}",
+							"raw": "{\r\n    \"id_sklepu\": 3,\r\n    \"id_uzytkownika\": 2,\r\n    \"kwota_transakcji\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -404,7 +431,34 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8080/api/getSaleById/2"
+						"url": "http://localhost:8080/api/getSaleById/3"
+					},
+					"response": []
+				},
+				{
+					"name": "getSalePositions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/getSalePositions/3"
+					},
+					"response": []
+				},
+				{
+					"name": "sumSalesFromGivenTime",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"od_kiedy\": \"2024-12-17T17:16:41.261755+01:00\",\r\n    \"do_kiedy\": \"2025-01-08T18:44:51.560846+01:00\",\r\n    \"id_sklepu\": 3,\r\n    \"id_uzytkownika\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/sumSalesFromGivenTime"
 					},
 					"response": []
 				}
@@ -420,7 +474,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_sprzedazy\": 1,\r\n    \"id_produktu\": 5,\r\n    \"ilosc\": 1\r\n}",
+							"raw": "{\r\n    \"id_sprzedazy\": 3,\r\n    \"id_produktu\": 3,\r\n    \"ilosc\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -452,7 +506,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nazwa\": \"smaczki kaczki\"\r\n}",
+							"raw": "{\r\n    \"nazwa\": \"Nokia\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -480,6 +534,15 @@
 						"url": "http://localhost:8080/api/getThirdPartyCompanyById/1"
 					},
 					"response": []
+				},
+				{
+					"name": "getTPCOfferPositions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/getThirdPartyCompanyOfferPositionsById/1"
+					},
+					"response": []
 				}
 			]
 		},
@@ -493,7 +556,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_firmy\": 2,\r\n    \"id_produktu\": 1\r\n}",
+							"raw": "{\r\n    \"id_firmy\": 1,\r\n    \"id_produktu\": 4\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
