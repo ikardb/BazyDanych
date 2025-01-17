@@ -12,4 +12,5 @@ func DiningMenuRoutes(app *fiber.App, db *gorm.DB) {
 	api.Post("/createDiningMenu", h.CreateDiningMenu)
 	api.Get("/diningMenus", h.GetDiningMenus)
 	api.Get("/getDiningMenuById/:id", h.GetDiningMenuById)
+	api.Get("/getDiningMenuPositions/:id", h.GetDiningMenuPositions)
 }

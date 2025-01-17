@@ -62,3 +62,33 @@ func (h *DiningMenuHandler) GetDiningMenuById(context *fiber.Ctx) error {
 	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "dining menu fetched succesfully"})
 	return nil
 }
+
+func (h *DiningMenuHandler) GetDiningMenuPositions(context *fiber.Ctx) error {
+	id := context.Params("id")
+
+	if id == "" {
+		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "ID cannot be empty"})
+		return nil
+	}
+
+	diningMenuPositions := []models.DiningMenuPositionWithProductName{}
+	query := `
+		SELECT 	
+			p.id_pozycji_jadlospisu,
+			p.id_jadlospisu,
+			p.id_produktu,
+			produkt.nazwa
+		FROM pozycja_jadlospisu p 
+		JOIN jadlospis j ON j.id_jadlospisu = p.id_jadlospisu
+		JOIN produkt ON p.id_produktu = produkt.id_produktu
+		WHERE j.id_jadlospisu = ?
+	`
+
+	err := h.DB.Raw(query, id).Scan(&diningMenuPositions).Error
+	if err != nil {
+		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "order positions not found"})
+		return err
+	}
+	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "order positions fetched successfully", "data": diningMenuPositions})
+	return nil
+}

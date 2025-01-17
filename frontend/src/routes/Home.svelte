@@ -3,8 +3,8 @@
 </script>
 
 <main>
-<h1>Witaj w mojej aplikacji!</h1>
-<p>Przejdź do <Link to="/diningMenu">Jadłospisu</Link>.</p>
+    <h1>Witaj w mojej aplikacji!</h1>
+    <p>Przejdź do <Link to="/diningMenu">Jadłospisu</Link>.</p>
 </main>
 
 <style>
