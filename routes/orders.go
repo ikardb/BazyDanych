@@ -13,5 +13,6 @@ func OrderRoutes(app *fiber.App, db *gorm.DB) {
 	api.Get("/orders", h.GetOrders)
 	api.Get("/getOrderById/:id", h.GetOrderById)
 	api.Get("/getOrderPositions/:id", h.GetOrderPositions)
+	api.Get("/getOrdersByShopId/:id", h.GetOrdersByShopId)
 	api.Post("/migrateToStock/:id", h.MigrateToStock)
 }

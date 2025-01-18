@@ -75,11 +75,18 @@ func (h *OrderHandler) GetOrderPositions(context *fiber.Ctx) error {
 		return nil
 	}
 
-	orderPositions := []models.OrderPositions{}
+	orderPositions := []models.OrderPositionsWithProductName{}
 	query := `
-		SELECT *
+		SELECT 
+			p.id_pozycji_zamowienia,
+			p.id_zamowienia,
+			p.ilosc_produktu,
+			produkt.nazwa,
+			produkt.cena
 		FROM pozycja_zamowienia p
 		JOIN zamowienie z ON z.id_zamowienia = p.id_zamowienia
+		JOIN pozycja_jadlospisu ON pozycja_jadlospisu.id_pozycji_jadlospisu = p.id_pozycji_jadlospisu
+		JOIN produkt ON produkt.id_produktu = pozycja_jadlospisu.id_produktu
 		WHERE z.id_zamowienia = ?
 	`
 
@@ -164,5 +171,23 @@ func (h *OrderHandler) MigrateToStock(context *fiber.Ctx) error {
 	}
 
 	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "Products migrated to stock levels successfully"})
+	return nil
+}
+
+func (h *OrderHandler) GetOrdersByShopId(context *fiber.Ctx) error {
+	orders := &[]models.Orders{}
+	id := context.Params("id")
+
+	if id == "" {
+		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "ID cannot be empty"})
+		return nil
+	}
+
+	err := h.DB.Where("id_sklepu = ?", id).Find(orders).Error
+	if err != nil {
+		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "order not found"})
+		return err
+	}
+	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "order ID fetched successfully", "data": orders})
 	return nil
 }

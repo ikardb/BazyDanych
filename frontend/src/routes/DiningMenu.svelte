@@ -17,7 +17,6 @@
     let newProductName = "";
     let newProductPrice = null;
 
-    // Funkcja do pobierania wszystkich jadłospisów
     const fetchDiningMenus = async () => {
         try {
             const response = await fetch('http://localhost:8080/api/diningMenus');
@@ -76,7 +75,6 @@
         }
     };
 
-    // Funkcja do dodawania jadłospisu
     const addDiningMenu = async () => {
         if (!newMenuKitchenId && !newMenuCompanyId) {
             alert("Proszę wybrać id kuchni lub id firmy.");
@@ -344,12 +342,12 @@
 
     .menu-item {
         border: 1px solid #ddd;
+        text-align: center;
         border-radius: 8px;
         padding: 1em;
         background-color: #f9f9f9;
         width: 250px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        text-align: left;
         cursor: pointer;
         transition: transform 0.2s;
     }
@@ -357,6 +355,10 @@
     .menu-item:hover {
         transform: scale(1.05);
     }
+
+    .menu-item:active {
+        transform: scale(1.00);
+    } 
 
     .menu-item h2 {
         font-size: 1.5em;

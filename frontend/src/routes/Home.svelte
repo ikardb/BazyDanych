@@ -4,7 +4,8 @@
 
 <main>
     <h1>Witaj w mojej aplikacji!</h1>
-    <p>Przejdź do <Link to="/diningMenu">Jadłospisu</Link>.</p>
+    <p>Przejdź do <Link to="/diningMenu">Jadłospisów</Link>.</p>
+    <p>Przejdź do <Link to="/orders">Zamówień</Link>.</p>
 </main>
 
 <style>
