@@ -22,6 +22,12 @@ func (h *DiningMenuPositionHandler) CreateDiningMenuPosition(context *fiber.Ctx)
 		return err
 	}
 
+	existingPosition := models.DiningMenuPositions{}
+	if err := h.DB.Where("id_jadlospisu = ? AND id_produktu = ?", position.Id_jadlospisu, position.Id_produktu).First(&existingPosition).Error; err == nil {
+		context.Status(http.StatusConflict).JSON(&fiber.Map{"message": "Pozycja dla tego produktu już istnieje w tym jadłospisie"})
+		return nil
+	}
+
 	err = h.DB.Create(&position).Error
 	if err != nil {
 		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "could not create position"})

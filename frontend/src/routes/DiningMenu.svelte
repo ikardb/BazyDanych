@@ -7,12 +7,15 @@
     let menuPositions = [];
     let addingMenu = false;
     let addingPositions = false;
+    let addingProduct = false;
     let companies = [];
     let kitchens = [];
     let products = [];
     let newProductId = "";
     let newMenuCompanyId = "";
     let newMenuKitchenId = "";
+    let newProductName = "";
+    let newProductPrice = null;
 
     // Funkcja do pobierania wszystkich jadłospisów
     const fetchDiningMenus = async () => {
@@ -20,7 +23,8 @@
             const response = await fetch('http://localhost:8080/api/diningMenus');
 
             if (!response.ok) {
-                throw new Error('Błąd pobierania danych');
+                const errorData = await response.json();
+                throw new Error(errorData.message);
             }
 
             const result = await response.json();
@@ -33,8 +37,10 @@
     const fetchCompanies = async () => {
         try {
             const response = await fetch('http://localhost:8080/api/thirdPartyCompanies');
-            if (!response.ok) throw new Error('Błąd pobierania firm');
             const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.message);
+            }
             companies = result.data;
         } catch (err) {
             console.error('Błąd:', err);
@@ -45,8 +51,10 @@
     const fetchKitchens = async () => {
         try {
             const response = await fetch('http://localhost:8080/api/kitchens');
-            if (!response.ok) throw new Error('Błąd pobierania kuchni');
             const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.message);
+            }
             kitchens = result.data;
         } catch (err) {
             console.error('Błąd:', err);
@@ -57,8 +65,10 @@
     const fetchProducts = async () => {
         try {
             const response = await fetch('http://localhost:8080/api/products');
-            if (!response.ok) throw new Error('Błąd pobierania kuchni');
             const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.message);
+            }
             products = result.data;
         } catch (err) {
             console.error('Błąd:', err);
@@ -86,14 +96,14 @@
             });
 
             if (!response.ok) {
-                throw new Error('Błąd dodawania jadłospisu');
+                const errorData = await response.json();
+                throw new Error(errorData.message);
             }
 
-            // Po udanym dodaniu, możesz odświeżyć listę jadłospisów
-            fetchDiningMenus(); // Możesz zaimplementować tę funkcję, aby odświeżyć dane
-            newMenuKitchenId = null; // Wyczyść wybrane id kuchni
-            newMenuCompanyId = null; // Wyczyść wybrane id firmy
-            addingMenu = false; // Zamknij formularz
+            fetchDiningMenus();
+            newMenuKitchenId = null;
+            newMenuCompanyId = null;
+            addingMenu = false;
         } catch (err) {
             alert(err.message);
         }
@@ -118,13 +128,44 @@
             });
 
             if (!response.ok) {
-                throw new Error('Błąd dodawania pozycji');
+                const errorData = await response.json();
+                throw new Error(errorData.message);
             }
 
-            // Po udanym dodaniu, możesz odświeżyć listę jadłospisów
-            await fetchMenuPositions(selectedMenuId); // Możesz zaimplementować tę funkcję, aby odświeżyć dane
-            newProductId = null; // Wyczyść wybrane id kuchni
-            addingPositions = false; // Wyczyść wybrane id firmy
+            await fetchMenuPositions(selectedMenuId);
+            newProductId = null;
+            addingPositions = false;
+            addingProduct = false;
+        } catch (err) {
+            alert(err.message);
+        }
+    };
+
+    const addProduct = async () => {
+        if (!newProductName || !newProductPrice) {
+            alert("Proszę podać zarówno nazwę, jak i cenę produktu.");
+        return;
+    }
+        try {
+            const response = await fetch('http://localhost:8080/api/createProduct', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nazwa: newProductName,
+                    cena: newProductPrice
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message);
+            }
+
+            await fetchProducts();
+            newProductId = null;
+            addingProduct = false;
         } catch (err) {
             alert(err.message);
         }
@@ -135,11 +176,14 @@
             const response = await fetch(`http://localhost:8080/api/getDiningMenuPositions/${id}`);
 
             if (!response.ok) {
-                throw new Error('Błąd pobierania pozycji menu');
+                const errorData = await response.json();
+                throw new Error(errorData.message);
             }
 
             const result = await response.json();
             menuPositions = result.data;
+            addingPositions = false;
+            addingProduct = false;
         } catch (err) {
             error = err.message;
         }
@@ -149,10 +193,15 @@
         addingMenu = true;
         selectedMenuId = null;
         addingPositions = false;
+        addingProduct = false;
     };
 
     const positionsAdding = () => {
         addingPositions = true;
+    }
+
+    const productAdding = () => {
+        addingProduct = true;
     }
 
     onMount(() => {
@@ -219,18 +268,31 @@
                 <h2>Pozycje dla jadłospisu #{selectedMenuId}</h2>
                 <button class="add_menu_button" on:click={() => positionsAdding()}>Dodaj pozycje</button>
                 {#if addingPositions}
-                    <div class="add-positions">
-                        <h2>Dodaj nową pozycję</h2>
-                        <select id="position" bind:value={newProductId}>
-                            <option value="" disabled hidden selected>--Wybierz produkt--</option>
-                            {#each products as product}
-                                <option value={product.id_produktu}>
-                                    {product.id_produktu} - {product.nazwa}
-                                </option>
-                            {/each}
-                        </select>
-                        <button on:click={addMenuPosition}>Dodaj</button>
-                        <button on:click={() => {addingPositions = false}}>Anuluj</button>
+                    <div class="positionsHandlers">
+                        <div class="add-positions">
+                            <h2>Dodaj nową pozycję</h2>
+                            <select id="position" bind:value={newProductId}>
+                                <option value="" disabled hidden selected>--Wybierz produkt--</option>
+                                {#each products as product}
+                                    <option value={product.id_produktu}>
+                                        {product.id_produktu} - {product.nazwa}
+                                    </option>
+                                {/each}
+                            </select>
+                            <button on:click={addMenuPosition}>Dodaj</button>
+                            <button on:click={() => productAdding()}>Dodaj nowy produkt</button>
+                            <button on:click={() => {addingPositions = false; addingProduct = false}}>Anuluj</button>
+                        </div>
+                        {#if addingProduct}
+                            <div class="add-products">
+                                <h2>Dodaj nowy produkt</h2>
+                                <input id="productName" type="text" placeholder="Wpisz nazwę produktu" bind:value={newProductName}/>
+                                
+                                <input id="productPrice" type="number" placeholder="Wpisz cenę produktu" bind:value={newProductPrice} min="0" step="0.01"/>
+                                <button on:click={addProduct}>Dodaj</button>
+                                <button on:click={() => {addingProduct = false}}>Anuluj</button>
+                            </div>
+                        {/if}
                     </div>
                 {/if}
                 {#if menuPositions.length === 0}
@@ -342,9 +404,30 @@
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
+    .positionsHandlers {
+        position: relative;
+        display: flex;
+        justify-content: center;
+    }
+
     .add-positions {
+        position: inherit;
+        display: flex;
+        width: 300px;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .add-products {
+        text-align: center;
+        position: absolute;
+        top: 0;
+        left: 300px;
+        width: 300px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        margin-left: 20px;
     }
 </style>
