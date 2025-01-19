@@ -64,7 +64,7 @@ func (h *StockLevelHandler) GetStockLevelById(context *fiber.Ctx) error {
 }
 
 func (h *StockLevelHandler) GetStockLevelByShopId(context *fiber.Ctx) error {
-	stockLevels := &[]models.StockLevels{}
+	stockLevels := &[]models.StockLevelWithProduct{}
 	id := context.Params("id")
 
 	if id == "" {
@@ -72,7 +72,19 @@ func (h *StockLevelHandler) GetStockLevelByShopId(context *fiber.Ctx) error {
 		return nil
 	}
 
-	err := h.DB.Where("id_sklepu = ?", id).Find(stockLevels).Error
+	query := `
+	SELECT 
+		s.id_stanu,
+		s.id_produktu,
+		s.ilosc,
+		s.id_sklepu,
+		produkt.nazwa
+	FROM stan_magazynowy s
+	JOIN produkt ON produkt.id_produktu = s.id_produktu
+	WHERE s.id_sklepu = ?
+	`
+
+	err := h.DB.Raw(query, id).Scan(&stockLevels).Error
 	if err != nil {
 		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "stock level not found"})
 		return err

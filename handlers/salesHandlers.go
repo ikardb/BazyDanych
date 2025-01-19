@@ -86,11 +86,18 @@ func (h *SaleHandler) GetSalePositions(context *fiber.Ctx) error {
 		return nil
 	}
 
-	salePositions := []models.SalePositions{}
+	salePositions := []models.SalePositionsWithProductName{}
 	query := `
-		SELECT *
+		SELECT 
+			p.id_pozycji,
+			p.id_sprzedazy,
+			p.id_produktu,
+			p.ilosc,
+			p.cena_jednostkowa,
+			produkt.nazwa
 		FROM pozycja_sprzedazy p
 		JOIN sprzedaz s ON s.id_sprzedazy = p.id_sprzedazy
+		JOIN produkt ON produkt.id_produktu = p.id_produktu
 		WHERE s.id_sprzedazy = ?
 	`
 
@@ -160,5 +167,23 @@ func (h *SaleHandler) SumSalesFromGivenTimeStoreUser(context *fiber.Ctx) error {
 	}
 
 	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "sales fetched successfully", "utarg ze sprzedazy:": salesSum, "data": sales})
+	return nil
+}
+
+func (h *SaleHandler) GetSalesByShopId(context *fiber.Ctx) error {
+	sales := &[]models.Sales{}
+	id := context.Params("id")
+
+	if id == "" {
+		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "ID cannot be empty"})
+		return nil
+	}
+
+	err := h.DB.Where("id_sklepu = ?", id).Find(sales).Error
+	if err != nil {
+		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "order not found"})
+		return err
+	}
+	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "order ID fetched successfully", "data": sales})
 	return nil
 }

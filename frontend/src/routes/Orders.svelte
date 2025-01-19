@@ -217,7 +217,7 @@
                                 <strong>Użytkownik:</strong> {order.id_uzytkownika} <br>
                                 <strong>Data:</strong> {formatDate(order.data_zamowienia)} <br>
                                 <strong>Kwota:</strong> {order.koszt_zamowienia} zł <br>
-                                <strong>Czy wczytane do stanu:</strong> {order.wczytane_do_stanu}
+                                <strong>Czy wczytane do stanu:</strong> {order.wczytane_do_stanu ? "Tak" : "Nie"}
                             </button>
                         </li>
                     {/each}

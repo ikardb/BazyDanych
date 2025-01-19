@@ -6,6 +6,7 @@
     <h1>Witaj w mojej aplikacji!</h1>
     <p>Przejdź do <Link to="/diningMenu">Jadłospisów</Link>.</p>
     <p>Przejdź do <Link to="/orders">Zamówień</Link>.</p>
+    <p>Przejdź do <Link to="/sales">Sprzedaży</Link>.</p>
 </main>
 
 <style>
