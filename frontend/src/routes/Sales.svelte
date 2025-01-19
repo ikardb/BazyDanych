@@ -179,9 +179,9 @@
     {#if error}
         <p class="error">{error}</p>
     {:else if !selectedStoreId}
-        <div class="sale-container">
+        <div class="store-container">
             {#each stores as store}
-                <button class="sale-item" on:click={() => handleStoreClick(store.id)}>
+                <button class="store-item" on:click={() => handleStoreClick(store.id)}>
                     <h2>{store.name}</h2>
                 </button>
             {/each}
@@ -292,31 +292,107 @@
 </main>
 
 <style>
-main {
-    text-align: center;
-    padding: 1em;
-    font-family: Arial, sans-serif;
-}
+    main {
+        text-align: center;
+        padding: 1em;
+        font-family: Arial, sans-serif;
+    }
 
-.sale-container {
-    display: flex;
-    justify-content: center;
-    gap: 1em;
-    margin-top: 1em;
-}
+    .error {
+        color: red;
+        font-size: 1.2em;
+    }
 
-.sale-item {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 1em;
-    background-color: #f9f9f9;
-    width: 150px;
-    text-align: center;
-    cursor: pointer;
-}
+    .loading {
+        color: #555;
+        font-size: 1.2em;
+    }
 
-.loading {
-    color: #555;
-    margin: 1em 0;
-}
+    .store-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5em;
+        margin-top: 1em;
+    }
+
+    .store-item {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1em;
+        background-color: #f9f9f9;
+        width: 250px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .store-item:hover {
+        transform: scale(1.05);
+    }
+
+    .sales-container {
+        margin-top: 2em;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sales-container ul {
+        list-style-type: none;
+        display: flex;
+        flex-direction: column-reverse;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sale-item {
+        background: #f4f4f4;
+        border: none;
+        margin: 0.5em 0;
+        padding: 1em;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        text-align: left;
+        width: 100%;
+    }
+
+    .sale-item:hover {
+        background: #eaeaea;
+    }
+
+    .sale-details {
+        margin-top: 1em;
+        width: 100%;
+        background: #fff;
+        padding: 1em;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .position-item {
+        background: #f9f9f9;
+        margin: 0.5em 0;
+        padding: 0.5em;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .add-position {
+        display: flex;
+        flex-direction: column;
+        width: 200px;
+    }
 </style>
