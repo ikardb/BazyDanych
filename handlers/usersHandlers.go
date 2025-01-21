@@ -28,6 +28,9 @@ func (h *UserHandler) CreateUser(context *fiber.Ctx) error {
 		return err
 	}
 	user.Haslo, err = user.HashPassword(user.Haslo)
+	if err != nil {
+		return err
+	}
 
 	err = h.DB.Create(&user).Error
 	if err != nil {

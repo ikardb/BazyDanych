@@ -153,6 +153,8 @@ func (h *SaleHandler) SumSalesFromGivenTimeStoreUser(context *fiber.Ctx) error {
 		query = query.Where("id_sklepu = ?", sumSalesRequest.StoreID)
 	}
 
+	query = query.Order("data_sprzedazy DESC")
+
 	err = query.Find(&sales).Error
 
 	if err != nil {
@@ -166,7 +168,7 @@ func (h *SaleHandler) SumSalesFromGivenTimeStoreUser(context *fiber.Ctx) error {
 		salesSum = roundFloat(salesSum, 2)
 	}
 
-	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "sales fetched successfully", "utarg ze sprzedazy:": salesSum, "data": sales})
+	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "sales fetched successfully", "utarg": salesSum, "data": sales})
 	return nil
 }
 
