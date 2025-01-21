@@ -159,9 +159,4 @@
         width: 80%;
         max-width: 400px;
     }
-
-    input[type="text"]:focus {
-        outline: none;
-        border-color: #007bff;
-    }
 </style>

@@ -432,4 +432,15 @@
         justify-content: center;
         margin-left: 20px;
     }
+
+    .add-menu {
+        width: 300px;
+        margin-top: 5px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .add_menu_button {
+        margin-top: 10px;
+    }
 </style>

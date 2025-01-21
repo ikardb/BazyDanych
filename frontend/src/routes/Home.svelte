@@ -3,11 +3,12 @@
 </script>
 
 <main>
-    <h1>Witaj w mojej aplikacji!</h1>
-    <p>Przejdź do <Link to="/diningMenu">Jadłospisów</Link>.</p>
-    <p>Przejdź do <Link to="/orders">Zamówień</Link>.</p>
-    <p>Przejdź do <Link to="/sales">Sprzedaży</Link>.</p>
-    <p>Przejdź do <Link to="/stockLevels">Stanów magazynowych</Link>.</p>
+    <h1>IkarDB</h1>
+    <p>Przejdź do <a href="/diningMenu">Jadłospisów</a>.</p>
+    <p>Przejdź do <a href="/orders">Zamówień</a>.</p>
+    <p>Przejdź do <a href="/sales">Sprzedaży</a>.</p>
+    <p>Przejdź do <a href="/stockLevels">Stanów magazynowych</a>.</p>
+    <p>Przejdź do <a href="/revenue">Podsumowania utargu</a>.</p>
 </main>
 
 <style>

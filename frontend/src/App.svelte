@@ -10,12 +10,12 @@
 
 <Router>
 	<nav>
-		<Link to="/">Home</Link>
-		<Link to="/diningMenu">Jadłospis</Link>
-		<Link to="/orders">Zamówienia</Link>
-		<Link to="/sales">Sprzedaże</Link>
-		<Link to="/stockLevels">Stany magazynowe</Link>
-		<Link to="/revenue">Utarg</Link>
+		<a href='/' class='link' use:Link>Home</a>
+		<a href='/diningMenu' class='link' use:Link>Jadłospis</a>
+		<a href='/orders' class='link' use:Link>Zamówienia</a>
+		<a href='/sales' class='link' use:Link>Sprzedaże</a>
+		<a href='/stockLevels' class='link' use:Link>Stany magazynowe</a>
+		<a href='/revenue' class='link' use:Link>Utarg</a>
 	</nav>
 
 	<Route path="/" component={Home} />
@@ -27,8 +27,34 @@
 </Router>
 
 <style>
-nav {
-	margin: 20px;
-}
+	nav {
+		margin: 20px;
+		padding: 15px;
+		justify-content: center;
+		display: flex;
+		gap: 20px;
+	}
+
+	.link {
+		display: block; /* Linki są blokami, co sprawia, że zachowują się jak przyciski */
+		padding: 10px 20px; /* Wewnętrzne marginesy, aby linki wyglądały na większe */
+		background-color: #42312e; /* Tło linków */
+		color: white; /* Kolor tekstu */
+		text-align: center; /* Wyśrodkowanie tekstu w linku */
+		text-decoration: none; /* Usunięcie podkreślenia */
+		border-radius: 5px; /* Zaokrąglenie rogów */
+		font-size: 16px; /* Ustawienie rozmiaru czcionki */
+		font-weight: bold; /* Pogrubienie tekstu */
+		transition: background-color 0.3s, transform 0.2s; /* Płynne przejścia */
+	}
+
+  .link:hover {
+    background-color: #615958;
+    transform: translateY(-3px);
+  }
+
+  .link:active {
+    transform: translateY(1px);
+  }
 </style>
   

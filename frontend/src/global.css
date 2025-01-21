@@ -1,0 +1,95 @@
+html, body {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	color: #333;
+	margin: 0;
+	padding: 8px;
+	box-sizing: border-box;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+a {
+	color: rgb(0,100,200);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:visited {
+	color: rgb(0,80,160);
+}
+
+label {
+	display: block;
+}
+
+button {
+	padding: 10px 15px;
+	margin-top: 5px;
+	font-weight: 900;
+	background-color: rgb(197, 197, 197); /* Tło przezroczyste */
+	color: #42312e; /* Kolor tekstu taki jak kolor obramowania */
+	border: 3px solid #42312e; /* Kolor obramowania */
+	border-radius: 8px;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background-color 0.3s, transform 0.2s, color 0.3s;
+}
+  
+button:hover {
+	background-color: #ffffff;
+	transform: scale(1.05);
+}
+
+button:active {
+	transform: scale(0.95);
+}
+
+input {
+	padding: 10px 15px;  /* Ustawiamy takie same padding jak dla przycisku */
+	margin-top: 5px;     /* Aby mieć taki sam odstęp od góry jak przycisk */
+	font-weight: 900;    /* Pogrubienie tekstu */
+	background-color: rgb(197, 197, 197); /* Tło takie samo jak przycisk */
+	color: #42312e; /* Kolor tekstu taki sam jak dla przycisku */
+	border: 3px solid #42312e; /* Obramowanie takie samo jak przycisk */
+	border-radius: 8px; /* Zaokrąglone rogi */
+	font-size: 16px;  /* Rozmiar czcionki taki sam jak przycisk */
+	width: 100%;  /* Ustawienie szerokości na 100%, aby rozciągały się na całą szerokość kontenera */
+	box-sizing: border-box; /* Ważne, aby padding i border były wliczane do szerokości */
+	cursor: pointer; /* Może zmieniać kursor na wskazujący (opcjonalnie) */
+	transition: background-color 0.3s, transform 0.2s, color 0.3s; /* Przejścia */
+  }
+
+  select {
+	padding: 10px 15px;  /* Padding identyczny jak w button */
+	margin-top: 5px;     /* Przestrzeń nad elementem */
+	font-weight: 900;    /* Pogrubienie tekstu */
+	background-color: rgb(197, 197, 197); /* Tło jak w przycisku */
+	color: #42312e;      /* Kolor tekstu */
+	border: 3px solid #42312e; /* Kolor obramowania */
+	border-radius: 8px;  /* Zaokrąglone rogi */
+	font-size: 16px;     /* Rozmiar czcionki */
+	cursor: pointer;    /* Kursor wskazujący */
+	transition: background-color 0.3s, transform 0.2s, color 0.3s; /* Płynne przejścia */
+	appearance: none;    /* Usuwanie domyślnego wyglądu systemowego w niektórych przeglądarkach */
+	-webkit-appearance: none;  /* Dla WebKit (Chrome, Safari) */
+	-moz-appearance: none;     /* Dla Firefox */
+	width: 100%;          /* Szerokość jak w button */
+	box-sizing: border-box; /* Wliczanie paddingu i border do szerokości */
+  }
+  
+  select:focus {
+	outline: none; 
+	box-shadow: 0 0 10px rgba(66, 49, 46, 0.5);
+  }
+  
+  select:hover {
+	background-color: #e4e4e4;
+  }
+  

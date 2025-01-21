@@ -362,10 +362,11 @@
         cursor: pointer;
         text-align: left;
         width: 100%;
+        transform: none;
     }
 
     .sale-item:hover {
-        background: #eaeaea;
+        background: #d8d8d8;
     }
 
     .sale-details {
