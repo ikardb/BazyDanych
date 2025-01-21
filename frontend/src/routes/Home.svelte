@@ -7,6 +7,7 @@
     <p>Przejdź do <Link to="/diningMenu">Jadłospisów</Link>.</p>
     <p>Przejdź do <Link to="/orders">Zamówień</Link>.</p>
     <p>Przejdź do <Link to="/sales">Sprzedaży</Link>.</p>
+    <p>Przejdź do <Link to="/stockLevels">Stanów magazynowych</Link>.</p>
 </main>
 
 <style>

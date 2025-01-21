@@ -4,6 +4,7 @@
 	import DiningMenu from './routes/DiningMenu.svelte';
 	import Orders from './routes/Orders.svelte';
 	import Sales from './routes/Sales.svelte';
+	import StockLevels from './routes/StockLevels.svelte';
 </script>
 
 <Router>
@@ -12,12 +13,14 @@
 		<Link to="/diningMenu">Jadłospis</Link>
 		<Link to="/orders">Zamówienia</Link>
 		<Link to="/sales">Sprzedaże</Link>
+		<Link to="/stockLevels">Stany magazynowe</Link>
 	</nav>
 
 	<Route path="/" component={Home} />
 	<Route path="/diningMenu" component={DiningMenu} />
 	<Route path="/orders" component={Orders} />
 	<Route path="/sales" component={Sales} />
+	<Route path="/stockLevels" component={StockLevels} />
 </Router>
 
 <style>

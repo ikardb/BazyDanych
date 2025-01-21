@@ -187,108 +187,108 @@
             {/each}
         </div>
     {:else}
-    <div class="sales-container">
-        <h2>Sprzedaże dla Sklepu #{selectedStoreId}</h2>
-        <button on:click={() => (selectedStoreId = null)}>Wróć do wyboru sklepu</button>
-        {#if sales.length === 0}
-            <p class="loading">Brak sprzedaży dla tego sklepu.</p>
-            <button on:click={addSale}>Dodaj sprzedaż</button>
-        {:else if showSales}
-            <button on:click={addSale} style="margin-top: 10px;">Dodaj sprzedaż</button>
-            <ul>
-                {#each sales as sale}
-                    <li>
-                        <button class="sale-item" on:click={() => handleSaleClick(sale.id_sprzedazy)}>
-                            <strong>ID sprzedaży:</strong> {sale.id_sprzedazy} <br>
-                            <strong>Użytkownik:</strong> {sale.id_uzytkownika} <br>
-                            <strong>Data:</strong> {formatDate(sale.data_sprzedazy)} <br>
-                            <strong>Kwota:</strong> {sale.kwota_transakcji} zł <br>
-                        </button>
-                    </li>
-                {/each}
-            </ul>
-        {/if}
-
-        {#if selectedSaleId}
-        <div class="sale-details">
-            <h3>Pozycje zamówienia #{selectedSaleId}</h3>
-            <button on:click={() => {selectedSaleId = null; showSales = true; positionsAdding = false; fetchSalesByShopId(selectedStoreId)}}>Wróć do sprzedaży</button>
-            {#if salePositions.length === 0}
-                <p class="loading">Brak pozycji w tej sprzedaży.</p>
-                <button on:click={addingPosition}>Dodaj pozycję</button>
-                <div class="add-position">
-                    {#if positionsAdding}
-                        <select id="productSelect" bind:value={selectedProductId} on:change={handleProductChange}>
-                            <option value="" disabled hidden selected>--Wybierz produkt--</option>
-                            {#each availableProducts.filter(product => product.ilosc > 0) as product}
-                                <option value={product.id_produktu}>
-                                    {product.nazwa} (Dostępne: {product.ilosc})
-                                </option>
-                            {/each}
-                        </select>
-                    
-                        {#if selectedProductId}
-                            <div>
-                                <label for="quantitySelect">Wybierz ilość:</label>
-                                <input
-                                    id="quantitySelect"
-                                    type="number"
-                                    min="1"
-                                    max={maxQuantity}
-                                    bind:value={selectedQuantity}
-                                />
-                            </div>
-                        {/if}
-            
-                        <button on:click={addPositionToSale}>Dodaj</button>
-                        <button on:click={cancelAdding}>Anuluj</button>
-                    {/if}
-                </div>
-            {:else}
+        <div class="sales-container">
+            <h2>Sprzedaże dla Sklepu #{selectedStoreId}</h2>
+            <button on:click={() => (selectedStoreId = null)}>Wróć do wyboru sklepu</button>
+            {#if sales.length === 0}
+                <p class="loading">Brak sprzedaży dla tego sklepu.</p>
+                <button on:click={addSale}>Dodaj sprzedaż</button>
+            {:else if showSales}
+                <button on:click={addSale} style="margin-top: 10px;">Dodaj sprzedaż</button>
                 <ul>
-                    {#each salePositions as position}
-                        <li class="position-item">
-                            <strong>ID pozycji:</strong> {position.id_pozycji} <br>
-                            <strong>Produkt:</strong> {position.nazwa} <br> 
-                            <strong>Ilość:</strong> {position.ilosc} <br>
-                            <strong>Cena jednostkowa:</strong> {position.cena_jednostkowa} zł <br>
+                    {#each sales as sale}
+                        <li>
+                            <button class="sale-item" on:click={() => handleSaleClick(sale.id_sprzedazy)}>
+                                <strong>ID sprzedaży:</strong> {sale.id_sprzedazy} <br>
+                                <strong>Użytkownik:</strong> {sale.id_uzytkownika} <br>
+                                <strong>Data:</strong> {formatDate(sale.data_sprzedazy)} <br>
+                                <strong>Kwota:</strong> {sale.kwota_transakcji} zł <br>
+                            </button>
                         </li>
                     {/each}
                 </ul>
-                <button on:click={addingPosition}>Dodaj pozycję</button>
-                <div class="add-position">
-                    {#if positionsAdding}
-                        <select id="productSelect" bind:value={selectedProductId} on:change={handleProductChange}>
-                            <option value="" disabled hidden selected>--Wybierz produkt--</option>
-                            {#each availableProducts.filter(product => product.ilosc > 0) as product}
-                                <option value={product.id_produktu}>
-                                    {product.nazwa} (Dostępne: {product.ilosc})
-                                </option>
-                            {/each}
-                        </select>
+            {/if}
+
+            {#if selectedSaleId}
+                <div class="sale-details">
+                    <h3>Pozycje zamówienia #{selectedSaleId}</h3>
+                    <button on:click={() => {selectedSaleId = null; showSales = true; positionsAdding = false; fetchSalesByShopId(selectedStoreId)}}>Wróć do sprzedaży</button>
+                    {#if salePositions.length === 0}
+                        <p class="loading">Brak pozycji w tej sprzedaży.</p>
+                        <button on:click={addingPosition}>Dodaj pozycję</button>
+                        <div class="add-position">
+                            {#if positionsAdding}
+                                <select id="productSelect" bind:value={selectedProductId} on:change={handleProductChange}>
+                                    <option value="" disabled hidden selected>--Wybierz produkt--</option>
+                                    {#each availableProducts.filter(product => product.ilosc > 0) as product}
+                                        <option value={product.id_produktu}>
+                                            {product.nazwa} (Dostępne: {product.ilosc})
+                                        </option>
+                                    {/each}
+                                </select>
+                            
+                                {#if selectedProductId}
+                                    <div>
+                                        <label for="quantitySelect">Wybierz ilość:</label>
+                                        <input
+                                            id="quantitySelect"
+                                            type="number"
+                                            min="1"
+                                            max={maxQuantity}
+                                            bind:value={selectedQuantity}
+                                        />
+                                    </div>
+                                {/if}
                     
-                        {#if selectedProductId}
-                            <div>
-                                <label for="quantitySelect">Wybierz ilość:</label>
-                                <input
-                                    id="quantitySelect"
-                                    type="number"
-                                    min="1"
-                                    max={maxQuantity}
-                                    bind:value={selectedQuantity}
-                                />
-                            </div>
-                        {/if}
-            
-                        <button on:click={addPositionToSale}>Dodaj</button>
-                        <button on:click={cancelAdding}>Anuluj</button>
+                                <button on:click={addPositionToSale}>Dodaj</button>
+                                <button on:click={cancelAdding}>Anuluj</button>
+                            {/if}
+                        </div>
+                    {:else}
+                        <ul>
+                            {#each salePositions as position}
+                                <li class="position-item">
+                                    <strong>ID pozycji:</strong> {position.id_pozycji} <br>
+                                    <strong>Produkt:</strong> {position.nazwa} <br> 
+                                    <strong>Ilość:</strong> {position.ilosc} <br>
+                                    <strong>Cena jednostkowa:</strong> {position.cena_jednostkowa} zł <br>
+                                </li>
+                            {/each}
+                        </ul>
+                        <button on:click={addingPosition}>Dodaj pozycję</button>
+                        <div class="add-position">
+                            {#if positionsAdding}
+                                <select id="productSelect" bind:value={selectedProductId} on:change={handleProductChange}>
+                                    <option value="" disabled hidden selected>--Wybierz produkt--</option>
+                                    {#each availableProducts.filter(product => product.ilosc > 0) as product}
+                                        <option value={product.id_produktu}>
+                                            {product.nazwa} (Dostępne: {product.ilosc})
+                                        </option>
+                                    {/each}
+                                </select>
+                            
+                                {#if selectedProductId}
+                                    <div>
+                                        <label for="quantitySelect">Wybierz ilość:</label>
+                                        <input
+                                            id="quantitySelect"
+                                            type="number"
+                                            min="1"
+                                            max={maxQuantity}
+                                            bind:value={selectedQuantity}
+                                        />
+                                    </div>
+                                {/if}
+                    
+                                <button on:click={addPositionToSale}>Dodaj</button>
+                                <button on:click={cancelAdding}>Anuluj</button>
+                            {/if}
+                        </div>
                     {/if}
                 </div>
             {/if}
         </div>
     {/if}
-    </div>
-{/if}
 </main>
 
 <style>

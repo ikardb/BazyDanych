@@ -95,6 +95,8 @@
                 throw new Error(errorData.message);
             }
 
+            fetchOrderPositions(selectedOrderId);
+            fetchOrdersByShopId(selectedStoreId);
         } catch (err) {
             error = err.message;
         }

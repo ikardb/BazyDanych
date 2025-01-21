@@ -64,13 +64,15 @@ func (h *StockLevelHandler) GetStockLevelById(context *fiber.Ctx) error {
 }
 
 func (h *StockLevelHandler) GetStockLevelByShopId(context *fiber.Ctx) error {
-	stockLevels := &[]models.StockLevelWithProduct{}
 	id := context.Params("id")
 
+	searchQuery := context.Query("q", "")
+
 	if id == "" {
-		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "ID cannot be empty"})
-		return nil
+		return context.Status(fiber.StatusBadRequest).JSON(&fiber.Map{"message": "Shop ID cannot be empty"})
 	}
+
+	stockLevels := &[]models.StockLevelWithProduct{}
 
 	query := `
 	SELECT 
@@ -84,11 +86,20 @@ func (h *StockLevelHandler) GetStockLevelByShopId(context *fiber.Ctx) error {
 	WHERE s.id_sklepu = ?
 	`
 
-	err := h.DB.Raw(query, id).Scan(&stockLevels).Error
-	if err != nil {
-		context.Status(http.StatusNotFound).JSON(&fiber.Map{"message": "stock level not found"})
-		return err
+	if searchQuery != "" {
+		query += ` AND produkt.nazwa ILIKE ?`
 	}
-	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "stock level ID fetched successfully", "data": stockLevels})
-	return nil
+
+	var err error
+	if searchQuery != "" {
+		err = h.DB.Raw(query, id, searchQuery+"%").Scan(&stockLevels).Error
+	} else {
+		err = h.DB.Raw(query, id).Scan(&stockLevels).Error
+	}
+
+	if err != nil {
+		return context.Status(fiber.StatusNotFound).JSON(&fiber.Map{"message": "Could not fetch stock levels for the shop"})
+	}
+
+	return context.Status(fiber.StatusOK).JSON(&fiber.Map{"message": "Stock levels loaded successfully", "data": stockLevels})
 }
