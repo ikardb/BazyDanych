@@ -40,23 +40,31 @@ func (h *OrderPositionHandler) CreateOrderPosition(context *fiber.Ctx) error {
 
 	positionCost := float64(product.Cena) * float64(orderPosition.Ilosc_produktu)
 
-	err = h.DB.Create(&orderPosition).Error
+	// Start a new transaction
+	tx := h.DB.Begin()
+
+	err = tx.Create(&orderPosition).Error
 	if err != nil {
+		tx.Rollback()
 		context.Status(http.StatusBadRequest).JSON(&fiber.Map{"message": "could not create order position"})
 		return err
 	}
 
 	updateQuery := `
-        UPDATE zamowienie
-        SET koszt_zamowienia = koszt_zamowienia + ?
-        WHERE id_zamowienia = ?
+		UPDATE zamowienie
+		SET koszt_zamowienia = koszt_zamowienia + ?
+		WHERE id_zamowienia = ?
 	`
-	err = h.DB.Exec(updateQuery, positionCost, orderPosition.Id_zamowienia).Error
+	err = tx.Exec(updateQuery, positionCost, orderPosition.Id_zamowienia).Error
 	if err != nil {
+		tx.Rollback()
 		return context.Status(http.StatusInternalServerError).JSON(&fiber.Map{
 			"message": "Failed to update order cost",
 		})
 	}
+
+	// Commit the transaction
+	tx.Commit()
 
 	context.Status(http.StatusOK).JSON(&fiber.Map{"message": "order position has been added"})
 	return nil

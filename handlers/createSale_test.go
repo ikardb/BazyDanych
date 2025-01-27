@@ -45,8 +45,6 @@ func TestCreateSale_WithMock(t *testing.T) {
 			int16(2),
 			200.00,
 			sqlmock.AnyArg(),
-			// 0.0,
-			// false,
 		).
 		WillReturnRows(sqlmock.NewRows([]string{"id_sprzedazy"}).AddRow(1))
 	mock.ExpectCommit()

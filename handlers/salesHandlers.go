@@ -32,10 +32,6 @@ func (h *SaleHandler) CreateSale(context *fiber.Ctx) error {
 
 	err := context.BodyParser(&sale)
 
-	// if sale.Kwota_transakcji == 0 {
-	// 	return context.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "kwota transakcji musi być większa od 0"})
-	// }
-
 	if err != nil {
 		context.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{"message": "Request failed"})
 		return err
