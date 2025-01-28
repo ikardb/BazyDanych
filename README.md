@@ -2,29 +2,6 @@
 This is a repository for a university project in which we have to develop a database
 for the food-service company (locally cooked & distributed regional cousine in self-managed shops).
 
-# To-do transactions
-
-- [ ] User
-	- [x] creation
-	- [ ] authentication
-- [x] Kitchen creation
-- [ ] Stock level check 
-- [ ] Revenue from the given time
-- [ ] Third-party supplier
-	- [ ] creation
-	- [ ] creating offer of one
-
-- [ ] Sells
-	- [ ] adding a sell that just have happened
-		- [ ] adding sell position to a sell
-- [x] Adding a product
-- [ ] Dining menu
-	- [ ] spreading the dining menu from a kitchen to shops
-		- [ ] adding a product (dining menu position) to a dining menu
-- [ ] Orders
-	- [ ] placing an order by a shop
-		- [ ] adding a product (order position) to an order
-
 # Transactions' descriptions
 <details>
 	<summary>User</summary>
